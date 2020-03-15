@@ -41,7 +41,6 @@ func (s *ResortService) Resorts() ([]*app.Resort, error) {
         if err != nil {
             return nil, err
         }
-        // TODO: Pass a pointer?
         resorts = append(resorts, &r)
     }
 

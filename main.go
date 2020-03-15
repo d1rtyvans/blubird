@@ -6,7 +6,7 @@ import (
 
     "github.com/joho/godotenv"
 
-    _ "github.com/d1rtyvans/blubird/app"    // TODO: May not need
+    // _ "github.com/d1rtyvans/blubird/app"    // TODO: May not need
     _ "github.com/d1rtyvans/blubird/config" // TODO: Set this up with env variables
     "github.com/d1rtyvans/blubird/postgres"
 )
@@ -25,13 +25,15 @@ func main() {
     }
     defer db.Close()
 
-    rs := postgres.ResortService{DB: db}
-    resorts, err := rs.Resorts()
+    // rs := postgres.ResortService{DB: db}
+    fs := postgres.ForecastService{DB: db}
+
+    forecasts, err := fs.CurrentForResort(1)
     if err != nil {
-        panic(err)
+        log.Fatal(err)
     }
 
-    for _, r := range resorts {
-        fmt.Println(r.Name)
+    for _, f := range forecasts {
+        fmt.Println(f.Date, string(f.WeatherJson))
     }
 }
