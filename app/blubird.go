@@ -10,4 +10,5 @@ type Resort struct {
 
 type ResortService interface {
     Resort(uid string) (*Resort, error)
+    Resorts() ([]*Resort, error)
 }

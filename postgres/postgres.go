@@ -4,7 +4,6 @@ import (
     "fmt"
     "database/sql"
 
-    "github.com/d1rtyvans/blubird/app"
     _ "github.com/lib/pq"
 )
 
@@ -35,21 +34,4 @@ func Open() (*sql.DB, error) {
     fmt.Println("Successfully connected to DB!")
 
     return db, nil
-}
-
-type ResortService struct {
-    DB *sql.DB
-}
-
-func (s *ResortService) Resort(uid string) (*app.Resort, error) {
-    var r app.Resort
-
-    sqlQuery := `SELECT id, uid, name, lat, lon FROM resorts WHERE uid = $1`
-    row := s.DB.QueryRow(sqlQuery, uid)
-
-    if err := row.Scan(&r.Id, &r.Uid, &r.Name, &r.Lat, &r.Lon); err != nil {
-        return nil, err
-    }
-
-    return &r, nil
 }

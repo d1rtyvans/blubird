@@ -26,10 +26,12 @@ func main() {
     defer db.Close()
 
     rs := postgres.ResortService{DB: db}
-    r, err := rs.Resort("sierra")
+    resorts, err := rs.Resorts()
     if err != nil {
         panic(err)
     }
 
-    fmt.Println(r.Name)
+    for _, r := range resorts {
+        fmt.Println(r.Name)
+    }
 }
