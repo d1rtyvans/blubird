@@ -20,7 +20,15 @@ type Forecast struct {
     WeatherJson []byte
 }
 
+type WeatherData struct {
+    Payload []map[string]interface{}
+}
+
 type ForecastService interface {
     UpsertAll(forecasts []*Forecast) error
     ForResort(resortId int) ([]*Forecast, error)
+}
+
+type WeatherClient interface {
+    DayForecasts(lat float64, lon float64) ([]byte, error)
 }

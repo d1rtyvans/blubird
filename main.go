@@ -7,8 +7,9 @@ import (
     "github.com/joho/godotenv"
 
     // _ "github.com/d1rtyvans/blubird/app"    // TODO: May not need
-    _ "github.com/d1rtyvans/blubird/config" // TODO: Set this up with env variables
+    "github.com/d1rtyvans/blubird/config" // TODO: Set this up with env variables
     "github.com/d1rtyvans/blubird/postgres"
+    "github.com/d1rtyvans/blubird/http"
 )
 
 func init() {
@@ -18,6 +19,7 @@ func init() {
 }
 
 func main() {
+    conf := config.New()
     // Connect to database
     db, err := postgres.Open()
     if err != nil {
@@ -25,15 +27,18 @@ func main() {
     }
     defer db.Close()
 
-    // rs := postgres.ResortService{DB: db}
-    fs := postgres.ForecastService{DB: db}
-
-    forecasts, err := fs.CurrentForResort(1)
+    rs := postgres.ResortService{DB: db}
+    r, err := rs.Resort("sierra")
     if err != nil {
         log.Fatal(err)
     }
 
-    for _, f := range forecasts {
-        fmt.Println(f.Date, string(f.WeatherJson))
+    wc := http.WeatherClient{ApiKey: conf.DarkSky.ApiKey}
+    resp, err := wc.DayForecasts(r.Lat, r.Lon)
+    if err != nil {
+        log.Fatal(err)
     }
+
+    fmt.Println(string(resp))
+    // fs := postgres.ForecastService{DB: db}
 }

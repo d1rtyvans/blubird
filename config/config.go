@@ -10,13 +10,20 @@ type DbConfig struct {
     Password string
 }
 
+type WeatherApiConfig struct {
+    ApiKey string
+}
+
 type Config struct {
-    Db DbConfig
+    Db      DbConfig
+    DarkSky WeatherApiConfig
 }
 
 func New() *Config {
     return &Config{
-        Db: DbConfig{
+        // Db: DbConfig{ }, // TODO
+        DarkSky: WeatherApiConfig{
+            ApiKey: getEnv("DARK_SKY_API_KEY"),
         },
     }
 }
